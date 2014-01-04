@@ -13,7 +13,7 @@ public class ExampleItemReaderTests extends TestCase {
 	}
 
 	public void testReadTwice() throws Exception {
-        System.out.println("TestreadTwice");
+        System.out.println("testReadTwice");
 		reader.read();
 		assertEquals(null, reader.read());
 	}
