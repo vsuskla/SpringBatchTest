@@ -1,6 +1,7 @@
 package no.klaus.test;
 
 import no.klaus.test.dto.TestDto;
+import no.klaus.test.dto.TestDtoRowMapper;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -35,6 +36,15 @@ public class ExampleItemReader implements ItemReader<String> {
 
     }
 
+    public ExampleItemReader() {
+        ExampleItemReader reader;
+        try {
+            reader = new ExampleItemReader(dataSource);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 	private String[] input = {"Hello world!", null};
 	
 	private int index = 0;
@@ -43,9 +53,12 @@ public class ExampleItemReader implements ItemReader<String> {
 	 * Reads next record from input
 	 */
 	public String read() throws Exception {
-        List<Map> row = jdbcTemplate.queryForList("SELECT KTOID, FORNAVN, ETTERNAVN FROM TEST.TEST;");
-        getJdbcTemplate().update();
+        String sql = "SELECT KTOID, FORNAVN, ETTERNAVN FROM TEST.TEST";
 
+        medlemmer = jdbcTemplate.query(sql, new BeanPropertyRowMapper(TestDto.class));
+        while(medlemmer.iterator().hasNext()){
+            medlemmer.iterator().toString();
+        }
 		if (index < input.length) {
             System.out.println(input[index]);
 			return input[index++];
